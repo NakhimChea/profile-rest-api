@@ -2,8 +2,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
+from rest_framework.authentication import TokenAuthentication
 
 from profile_api import serializers
+from profile_api import models
+from profile_api import permissions
 
 
 class HelloAPIView(APIView):
@@ -108,3 +111,16 @@ class HelloViewSet(viewsets.ViewSet):
         """Handle deleting an object"""
 
         return Response({'http_method': 'DELETE'})
+
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    """Handle creating and updating profiles"""
+
+    # ViewSet reads the models and integrates serializers to functions in models
+    serializer_class = serializers.UserProfileSerializer
+    # Queryset gives all functionality of models in care of if serializers
+    queryset = models.UserProfile.objects.all()
+
+    #APIView rest_framework views.py
+    authentication_classes = (TokenAuthentication, ) # Default: Basic & Session
+    permission_classes = (permissions.UpdateOwnProfile, ) # Default: AllowAny
