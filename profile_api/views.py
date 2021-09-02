@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.authentication import TokenAuthentication
+from rest_framework import filters
 
 from profile_api import serializers
 from profile_api import models
@@ -124,3 +125,6 @@ class UserProfileViewSet(viewsets.ModelViewSet):
     #APIView rest_framework views.py
     authentication_classes = (TokenAuthentication, ) # Default: Basic & Session
     permission_classes = (permissions.UpdateOwnProfile, ) # Default: AllowAny
+
+    filter_backends = (filters.SearchFilter, )
+    search_fields = ('name', 'email', )
